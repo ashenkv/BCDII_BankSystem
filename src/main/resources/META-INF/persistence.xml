@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence 
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    
+    <persistence-unit name="bankingPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>jdbc/BankingDS</jta-data-source>
+        
+        <!-- Entity Classes -->
+        <class>com.bank.entity.Customer</class>
+        <class>com.bank.entity.FinancialAccount</class>
+        <class>com.bank.entity.Transaction</class>
+        
+        <!-- Exclude unlisted classes to avoid auto-discovery issues -->
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        
+        <properties>
+            <!-- Database Platform Configuration for H2 -->
+            <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            
+            <!-- Database Schema Generation -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
+            <property name="jakarta.persistence.schema-generation.drop-source" value="metadata"/>
+            
+            <!-- SQL Script Generation disabled for server deployment -->
+            <!-- Script generation properties removed to prevent file path errors -->
+            
+            <!-- EclipseLink Specific Properties -->
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.timestamp" value="true"/>
+            <property name="eclipselink.logging.session" value="true"/>
+            <property name="eclipselink.logging.thread" value="true"/>
+            
+            <!-- H2 Database v2.x compatibility settings -->
+            <property name="eclipselink.ddl-generation.table-creation-suffix" value=""/>
+            <property name="eclipselink.oracle.proxy-type" value="false"/>
+            
+            <!-- H2 v2.x IDENTITY sequence configuration -->
+            <property name="eclipselink.sequencing.sequence-name-field" value="SEQ_NAME"/>
+            <property name="eclipselink.sequencing.sequence-counter-field" value="SEQ_COUNT"/>
+            <property name="eclipselink.sequencing.default-sequence-to-table" value="true"/>
+            <property name="eclipselink.sequencing.table-name" value="BANKING_SEQUENCE"/>
+            
+            <!-- Disable IDENTITY function calls for H2 v2.x -->
+            <property name="eclipselink.platform.class-name" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            <property name="eclipselink.auto-commit-non-jta" value="true"/>
+            
+            <!-- DDL Generation Configuration -->
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+            
+            <!-- Connection Pool Settings -->
+            <property name="eclipselink.connection-pool.default.initial" value="5"/>
+            <property name="eclipselink.connection-pool.default.min" value="5"/>
+            <property name="eclipselink.connection-pool.default.max" value="20"/>
+            
+            <!-- Performance Optimizations -->
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.query-results-cache" value="true"/>
+            <property name="eclipselink.batch-writing" value="JDBC"/>
+            
+            <!-- Validation Mode -->
+            <property name="jakarta.persistence.validation.mode" value="AUTO"/>
+            
+            <!-- Transaction Management -->
+            <property name="eclipselink.jpa.uppercase-column-names" value="false"/>
+            <property name="eclipselink.persistence-context.flush-mode" value="AUTO"/>
+        </properties>
+    </persistence-unit>
+    
+    <!-- Test Persistence Unit for Unit Testing -->
+    <persistence-unit name="bankingTestPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <!-- Entity Classes -->
+        <class>com.bank.entity.Customer</class>
+        <class>com.bank.entity.FinancialAccount</class>
+        <class>com.bank.entity.Transaction</class>
+        
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        
+        <properties>
+            <!-- H2 File Database for Testing -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:~/banking-db;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value="sa"/>
+            
+            <!-- Database Platform Configuration for H2 -->
+            <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            
+            <!-- Schema Generation for Testing -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
+            <property name="jakarta.persistence.schema-generation.drop-source" value="metadata"/>
+            
+            <!-- EclipseLink Settings for Testing -->
+            <property name="eclipselink.logging.level" value="WARNING"/>
+            <property name="eclipselink.logging.parameters" value="false"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.weaving" value="false"/>
+            
+            <!-- H2 v2.x sequence configuration for testing -->
+            <property name="eclipselink.sequencing.default-sequence-to-table" value="true"/>
+            <property name="eclipselink.sequencing.table-name" value="BANKING_SEQUENCE"/>
+            <property name="eclipselink.platform.class-name" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            
+            <!-- DDL Generation for Testing -->
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+        </properties>
+    </persistence-unit>
+</persistence> 

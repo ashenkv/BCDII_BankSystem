@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    
+    <display-name>Banking System with EJB and Timer Services</display-name>
+    <description>Enterprise Banking System implementing EJB Timer Services, Transaction Management, and Security</description>
+    
+    <!-- Welcome Files -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <!-- Security Configuration -->
+    <!-- Allow public API access without authentication -->
+    <security-constraint>
+        <display-name>Public API Access</display-name>
+        <web-resource-collection>
+            <web-resource-name>Public Resources</web-resource-name>
+            <url-pattern>/api/public/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <!-- No auth-constraint means public access -->
+    </security-constraint>
+    
+    <!-- Secure customer management endpoints -->
+    <security-constraint>
+        <display-name>Customer Management</display-name>
+        <web-resource-collection>
+            <web-resource-name>Customer Resources</web-resource-name>
+            <url-pattern>/api/customers/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+            <role-name>MANAGER</role-name>
+            <role-name>EMPLOYEE</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <!-- Admin-only delete operations -->
+    <security-constraint>
+        <display-name>Admin Delete Operations</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin Delete Resources</web-resource-name>
+            <url-pattern>/api/customers/*</url-pattern>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <!-- Authentication Method -->
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>BankingRealm</realm-name>
+    </login-config>
+    
+    <!-- Security Roles -->
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+    
+    <security-role>
+        <role-name>MANAGER</role-name>
+    </security-role>
+    
+    <security-role>
+        <role-name>EMPLOYEE</role-name>
+    </security-role>
+    
+    <security-role>
+        <role-name>CUSTOMER</role-name>
+    </security-role>
+    
+    <!-- Session Configuration -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure>
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+    
+    <!-- Error Pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.html</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.html</location>
+    </error-page>
+    
+    <!-- MIME Type Mappings -->
+    <mime-mapping>
+        <extension>json</extension>
+        <mime-type>application/json</mime-type>
+    </mime-mapping>
+</web-app> 
